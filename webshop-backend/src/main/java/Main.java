@@ -1,8 +1,22 @@
+import com.webshop.model.Product;
+import com.webshop.model.ShoppingCart;
+import com.webshop.model.User;
+
 public class Main {
     public static void main(String[] args) {
-        Product product = new Product(2L, "kenyér", new MonetaryAmount(850.5, "HUF"), 10);
-        System.out.println("Valid product: " + ProductValidator.isValidProduct(product));
-        Product product2 = new Product(2L, "kenyér123", new MonetaryAmount(850.5, "HUF"), 10);
-        System.out.println("Invalid product: " + ProductValidator.isValidProduct(product));
+        User user = new User("Ákos");
+        Product carrot = new Product("Carrot", 300, 5);
+        Product apple = new Product("Apple", 250, 0);
+
+        ShoppingCart cart = new ShoppingCart(user);
+
+        cart.addProduct(carrot);
+        cart.addProduct(carrot);
+        cart.addProduct(apple);
+
+        System.out.println(cart);
+
+        cart.removeProduct(carrot);
+        System.out.println(cart);
     }
 }
