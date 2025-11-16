@@ -4,8 +4,7 @@ public class ProductValidator {
         return name.matches("[a-z ]+");
     }
 
-    public static boolean isValidPrice(MonetaryAmount price) {
-        return price.getAmount() > 0;
+    public static boolean isValidPrice(MonetaryAmount price) { return price.getAmount() > 0;
     }
 
     public static boolean isValidStock(int stock) {

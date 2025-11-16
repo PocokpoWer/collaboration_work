@@ -15,7 +15,7 @@ public class ShoppingCart {
     public boolean addProduct(Product p) {
         if (p.getStock() > 0) {
             products.add(p);
-            totalPrice += p.getPrice();
+            totalPrice += p.getPrice().getAmount();
             p.setStock(p.getStock() - 1);
             return true;
         } else {
@@ -26,7 +26,7 @@ public class ShoppingCart {
 
     public boolean removeProduct(Product p) {
         if (products.remove(p)) {
-            totalPrice -= p.getPrice();
+            totalPrice -= p.getPrice().getAmount();
             p.setStock(p.getStock() + 1);
             return true;
         } else {
