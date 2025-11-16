@@ -1,10 +1,10 @@
 public class Product {
     private long id;
     private String name;
-    private MonetaryAmount price;
+    private int price;
     private int stock;
 
-    public Product(long id, String name, MonetaryAmount price, int stock) {
+    public Product(long id, String name, int price, int stock) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -19,7 +19,7 @@ public class Product {
         return name;
     }
 
-    public MonetaryAmount getPrice() {
+    public int getPrice() {
         return price;
     }
 
@@ -27,13 +27,12 @@ public class Product {
         return stock;
     }
 
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
     @Override
     public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", price=" + price +
-                ", stock=" + stock +
-                '}';
+        return name + " (" + price + " Ft, stock: " + stock + ")";
     }
 }
