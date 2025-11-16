@@ -1,10 +1,10 @@
 public class Product {
     private long id;
     private String name;
-    private int price;
+    private MonetaryAmount price;
     private int stock;
 
-    public Product(long id, String name, int price, int stock) {
+    public Product(long id, String name, MonetaryAmount price, int stock) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -19,7 +19,7 @@ public class Product {
         return name;
     }
 
-    public int getPrice() {
+    public MonetaryAmount getPrice() {
         return price;
     }
 
