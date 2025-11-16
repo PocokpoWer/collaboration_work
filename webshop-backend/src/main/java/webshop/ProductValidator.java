@@ -1,3 +1,5 @@
+package webshop;
+
 public class ProductValidator {
 
     public static boolean isValidName(String name) {
