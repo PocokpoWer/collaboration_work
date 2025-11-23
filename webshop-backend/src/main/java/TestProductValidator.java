@@ -1,7 +1,4 @@
 import org.junit.Test;
-import webshop.MonetaryAmount;
-import webshop.Product;
-import webshop.ProductValidator;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
