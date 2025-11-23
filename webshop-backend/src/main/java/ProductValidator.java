@@ -7,6 +7,8 @@ public class ProductValidator {
     public static boolean isValidPrice(MonetaryAmount price) { return price.getAmount() > 0;
     }
 
+    public static boolean isValidCountry(Country country) { return country != null; }
+    
     public static boolean isValidStock(int stock) {
         return stock > 0;
     }
