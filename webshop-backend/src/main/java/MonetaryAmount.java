@@ -1,5 +1,3 @@
-package webshop;
-
 public class MonetaryAmount {
     private double amount;
     private String currency;
