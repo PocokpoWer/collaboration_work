@@ -1,9 +1,15 @@
+import lombok.Getter;
+import lombok.ToString;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@ToString
 public class ShoppingCart {
     private List<Product> products;
     private int totalPrice;
+    CurrencyConverter converter;
     private User owner;
 
     public ShoppingCart(User owner) {
@@ -12,7 +18,7 @@ public class ShoppingCart {
         this.totalPrice = 0;
     }
 
-    public boolean addProduct(Product p) {
+    public boolean addProduct(Product p, User u) {
         if (p.getStock() > 0) {
             products.add(p);
             totalPrice += p.getPrice().getAmount();
@@ -35,29 +41,8 @@ public class ShoppingCart {
         }
     }
 
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public int getTotalPrice() {
-        return totalPrice;
-    }
-
-    public User getOwner() {
-        return owner;
-    }
-
     public void clear() {
         products.clear();
         totalPrice = 0;
-    }
-
-    @Override
-    public String toString() {
-        return "ShoppingCart{" +
-                "owner=" + owner.getName() +
-                ", totalPrice=" + totalPrice +
-                ", products=" + products +
-                '}';
     }
 }

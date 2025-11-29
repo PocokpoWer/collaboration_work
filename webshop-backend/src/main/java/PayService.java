@@ -1,5 +1,3 @@
-import com.sun.security.jgss.GSSUtil;
-
 public class PayService {
 
     /**
@@ -28,7 +26,7 @@ public class PayService {
             double newAmount = balanceAmount - totalPrice;
             MonetaryAmount newBalance = new MonetaryAmount(
                     newAmount,
-                    balance.getCurrency()
+                    balance.getMoneyCurrency()
             );
 
             owner.setBalance(newBalance);
