@@ -14,4 +14,10 @@ public class MonetaryAmount {
     public String getCurrency() {
         return currency;
     }
+
+    // FIXME: needed for the TestPayService test
+    @Override
+    public String toString() {
+        return amount + " " + currency;
+    }
 }

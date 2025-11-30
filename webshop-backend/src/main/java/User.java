@@ -12,4 +12,11 @@ public class User {
     private Address address;
     private ShoppingCart shoppingCart;
     private MonetaryAmount balance;
+
+    // FIXME: needed for the TestPayService test
+    public User(int id, String name, MonetaryAmount balance) {
+        this.id = id;
+        this.name = name;
+        this.balance = balance;
+    }
 }
