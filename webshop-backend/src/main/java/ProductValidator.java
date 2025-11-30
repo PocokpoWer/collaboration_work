@@ -19,7 +19,7 @@ public class ProductValidator implements Validator<Product> {
         if (product.getPrice().getAmount() < 0) {
             return false;
         }
-        if (product.getStock() < 0) {
+        if (product.getStock() <= 0) {
             return false;
         }
         return true;
