@@ -1,7 +1,9 @@
 import model.MonetaryAmount;
+import model.MoneyCurrency;
 import model.Product;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestPayService {
 
@@ -14,11 +16,11 @@ public class TestPayService {
         User user = User.builder()
                 .id(1)
                 .name("Sanyi")
-                .balance(new MonetaryAmount(1520, "EUR") )
+                .balance(new MonetaryAmount(1520, MoneyCurrency.EUR))
                 .build();
         ShoppingCart cart = new ShoppingCart(user);
         Product milk = new Product(20L, "milk",
-                new MonetaryAmount(2, "EUR"), 10);
+                new MonetaryAmount(2, MoneyCurrency.EUR), 10);
         cart.addProduct(milk);
 
         PayService payService = new PayService();

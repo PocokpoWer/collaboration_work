@@ -1,5 +1,8 @@
 import exceptions.MissingParamException;
 import exceptions.ValidationException;
+import model.MonetaryAmount;
+import model.MoneyCurrency;
+import model.Product;
 
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +40,7 @@ public class AddProduct {
             throw new ValidationException("price or stock doesn't a number", e);
         }
 
-        MonetaryAmount monetaryAmount = new MonetaryAmount(priceValue, "HUF");
+        MonetaryAmount monetaryAmount = new MonetaryAmount(priceValue, MoneyCurrency.HUF);
         long newId = products.size() + 1L; //normal Id's before we don't had an order!
         Product product = new Product(newId, name, monetaryAmount, stockValue);
 
