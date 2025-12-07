@@ -36,7 +36,7 @@ public class PayService {
             System.out.println(owner.getName() + " bought: " + cart.getProducts());
             cart.clear();
         } else {
-            System.out.println("Error: user " + owner.getName() + "has insufficient balance. Needed: " + totalPrice + ", available "
+            System.out.println("Error: user " + owner.getName() + " has insufficient balance. Needed: " + totalPrice + ", available "
             + balanceAmount);
         }
     }
