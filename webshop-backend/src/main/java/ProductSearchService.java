@@ -1,3 +1,5 @@
+import model.Product;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +24,7 @@ public class ProductSearchService {
     public List<Product> searchByPriceRange(List<Product> products, double maxPrice, double minPrice) {
         List<Product> result = new ArrayList<>();
         for (Product p : products) {
-            double price = p.getPrice().getAmount(); //MonetaryAmount - double!!
+            double price = p.getPrice().getAmount(); //model.MonetaryAmount - double!!
             if (price >= minPrice && price <= maxPrice) {
                 result.add(p);
             }

@@ -1,3 +1,5 @@
+import model.Product;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +21,7 @@ public class ShoppingCart {
             p.setStock(p.getStock() - 1);
             return true;
         } else {
-            System.out.println("Product " + p.getName() + " is out of stock!");
+            System.out.println("model.Product " + p.getName() + " is out of stock!");
             return false;
         }
     }
@@ -30,7 +32,7 @@ public class ShoppingCart {
             p.setStock(p.getStock() + 1);
             return true;
         } else {
-            System.out.println("Product " + p.getName() + " is not in the cart!");
+            System.out.println("model.Product " + p.getName() + " is not in the cart!");
             return false;
         }
     }

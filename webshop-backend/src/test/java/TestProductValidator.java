@@ -1,3 +1,5 @@
+import model.MonetaryAmount;
+import model.Product;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;

@@ -8,7 +8,7 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
         <class>User</class>
-        <class>Product</class>
+        <class>model.Product</class>
         <class>ShoppingCart</class>
 
         <properties>

@@ -1,3 +1,5 @@
+import model.Product;
+
 public class ProductValidator implements Validator<Product> {
 
     //TODO

@@ -1,7 +1,17 @@
+package model;
+
+import jakarta.persistence.*;
+@Entity
+@Table(name="product")
 public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    @Column(name = "product_name")
     private String name;
+    @Column(name = "product_price")
     private MonetaryAmount price;
+    @Column(name = "product_stock")
     private int stock;
 
     public Product(long id, String name, MonetaryAmount price, int stock) {

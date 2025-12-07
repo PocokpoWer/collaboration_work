@@ -1,10 +1,12 @@
+import model.Product;
+
 import java.util.List;
 
 public class ShoppingCartValidator implements Validator<ShoppingCart> {
 
     //TODO
     // owner: nem lehet null és UserValidator szabályaival egyező
-    // products list: nem lehet null, lehet üres, tényleges Product termék legyen
+    // products list: nem lehet null, lehet üres, tényleges model.Product termék legyen
     // products list: nem tartalmazhat null vagy duplikált elemeket
     // totalPrice: nem lehet negatív, egyeznie kell a termékek árainak összegével
 
