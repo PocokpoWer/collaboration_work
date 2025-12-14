@@ -81,6 +81,7 @@ public class ConsoleMenu {
                     chatBot.startChat(sc, chatContext);
                     break;
                 case 9:
+                    sc.close();
                     System.exit(0);
                     break;
                 default:
