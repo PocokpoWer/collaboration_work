@@ -18,15 +18,16 @@ public class ListProduct {
     private ProductSearchService productSearchService = new ProductSearchService();
 
     public void getAllProducts() throws IOException, InterruptedException {
+        PrintUtils.line();
         PrintUtils.info("=== Available Products ===");
+        PrintUtils.line();
         List<Product> list = productCRUDService.getAllProducts();
         printMenu();
         int userInput = Integer.parseInt(scanner.nextLine());
         switch (userInput) {
             case 1 -> list.forEach(System.out::println);
             case 2 -> productSearchService.searchByName(list, scanner.nextLine()).forEach(System.out::println);
-            case 3 ->
-                    productSearchService.searchByPriceRange(list, scanner.nextDouble(), scanner.nextDouble()).forEach(System.out::println);
+            case 3 -> productSearchService.searchByPriceRange(list, scanner.nextBigDecimal(), scanner.nextBigDecimal()).forEach(System.out::println);
             case 4 -> productSearchService.searchByAvailability(list).forEach(System.out::println);
             case 5 -> {
                 System.out.println("Select product ID to add to cart: ");

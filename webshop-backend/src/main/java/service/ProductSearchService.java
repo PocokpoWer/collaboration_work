@@ -2,6 +2,7 @@ package service;
 
 import model.Product;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,11 +23,11 @@ public class ProductSearchService {
         return result;
     }
 
-    public List<Product> searchByPriceRange(List<Product> products, double minPrice, double maxPrice) {
+    public List<Product> searchByPriceRange(List<Product> products, BigDecimal minPrice, BigDecimal maxPrice) {
         List<Product> result = new ArrayList<>();
         for (Product p : products) {
-            double price = p.getPrice().getAmount(); //model.MonetaryAmount - double!!
-            if (price >= minPrice && price <= maxPrice) {
+            BigDecimal price = p.getPrice().getAmount(); //model.MonetaryAmount - double!!
+            if (price.compareTo(minPrice) >= 0 && price.compareTo(maxPrice) <= 0) {
                 result.add(p);
             }
         }

@@ -20,13 +20,13 @@ public class JpaUserDao implements Dao<User, Long> {
 
     @Override
     public List<User> findAll() {
-        String query = "SELECT new model.User(u.name) FROM User u";
+        String query = "SELECT u FROM User u";
         return entityManager.createQuery(query, User.class).getResultList();
     }
 
     @Override
     public void save(User user) {
-        entityManager.merge(user);
+        entityManager.persist(user);
     }
 
     @Override

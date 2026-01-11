@@ -3,6 +3,7 @@ package validators;
 import model.Product;
 import service.ShoppingCart;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class ShoppingCartValidator implements Validator<ShoppingCart> {
@@ -32,11 +33,11 @@ public class ShoppingCartValidator implements Validator<ShoppingCart> {
                 return false;
             }
         }
-        int sum = 0;
+        BigDecimal sum = BigDecimal.ZERO;
         for (Product p : products) {
-            sum += (int) p.getPrice().getAmount();
+            sum.add(p.getPrice().getAmount());
         }
-        if (shoppingCart.getTotalPrice() < 0) return false;
+        if (shoppingCart.getTotalPrice().compareTo(BigDecimal.ZERO) < 0) return false;
         if (shoppingCart.getTotalPrice() != sum) return false;
 
         return true;

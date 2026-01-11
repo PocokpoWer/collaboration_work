@@ -13,11 +13,6 @@ import service.ShoppingCart;
 @Table(name = "users")
 @ToString
 public class User {
-
-    public User(String name) {
-        this.name = name;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -27,8 +22,12 @@ public class User {
     private int age;
     @Embedded
     private Address address;
-    @Embedded
+    @Transient
     private ShoppingCart shoppingCart;
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "amount", column = @Column(name = "balance_amount")),
+            @AttributeOverride(name = "currency", column = @Column(name = "balance_currency"))
+    })
     private MonetaryAmount balance;
 }

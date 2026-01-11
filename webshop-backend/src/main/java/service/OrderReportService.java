@@ -1,6 +1,5 @@
 package service;
 
-import dao.Dao;
 import model.Product;
 import model.User;
 
@@ -35,7 +34,7 @@ public class OrderReportService {
             ShoppingCart shoppingCart = user.getShoppingCart();
             if (shoppingCart != null) {
                 for (Product product : shoppingCart.getProducts()) {
-                    revenue = revenue.add(BigDecimal.valueOf(product.getPrice().getAmount()));
+                    revenue.add(product.getPrice().getAmount());
                 }
             }
         }

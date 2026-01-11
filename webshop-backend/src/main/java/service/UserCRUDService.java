@@ -18,7 +18,7 @@ public class UserCRUDService {
         userDao.save(user);
     }
 
-    public List<String> getAllUsers() {
+    public List<User> getAllUsers() {
         return userDao.findAll();
     }
 

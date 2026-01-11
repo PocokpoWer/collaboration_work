@@ -5,7 +5,7 @@ public final class PrintUtils {
     private PrintUtils() {}
 
     public static void title(String text) {
-        System.out.println(ConsoleColors.CYAN + "=== " + text + " ===" + ConsoleColors.RESET);
+        System.out.println(ConsoleColors.BLUE + "=== " + text + " ===" + ConsoleColors.RESET);
     }
 
     public static void success(String text) {

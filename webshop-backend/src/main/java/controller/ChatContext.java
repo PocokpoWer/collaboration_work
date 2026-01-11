@@ -6,6 +6,7 @@ import model.Product;
 import model.User;
 import service.ShoppingCart;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @AllArgsConstructor
@@ -15,7 +16,7 @@ public class ChatContext {
     private final List<Product> products;
     private final ShoppingCart cart;
 
-    public double getBalanceAmount() {
+    public BigDecimal getBalanceAmount() {
         return user.getBalance().getAmount();
     }
 

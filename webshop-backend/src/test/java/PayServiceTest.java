@@ -7,6 +7,7 @@ import service.PayService;
 import service.ShoppingCart;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,17 +22,17 @@ public class PayServiceTest {
         User user = User.builder()
                 .id(1)
                 .name("Sanyi")
-                .balance(new MonetaryAmount(1520, MoneyCurrency.EUR))
+                .balance(new MonetaryAmount(new BigDecimal(1520), MoneyCurrency.EUR))
                 .build();
         ShoppingCart cart = new ShoppingCart(user);
         Product milk = new Product(20L, "milk",
-                new MonetaryAmount(2, MoneyCurrency.EUR), 10);
+                2, new MonetaryAmount(new BigDecimal(10), MoneyCurrency.EUR));
         cart.addProduct(milk);
 
         PayService payService = new PayService();
         payService.pay(cart);
 
-        assertEquals(1518, user.getBalance().getAmount(), 0.001);
+        assertEquals(new BigDecimal(1518), user.getBalance().getAmount(), String.valueOf(0.001));
         assertTrue(cart.getProducts().isEmpty());
         assertEquals(0, cart.getTotalPrice());
     }

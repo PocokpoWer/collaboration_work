@@ -6,8 +6,10 @@ import lombok.AllArgsConstructor;
 import model.MonetaryAmount;
 import model.MoneyCurrency;
 import model.Product;
+import utils.PrintUtils;
 import validators.ProductValidator;
 
+import java.math.BigDecimal;
 import java.util.Scanner;
 
 @AllArgsConstructor
@@ -16,6 +18,9 @@ public class AddProduct {
     private ProductValidator productValidator;
 
     public void execute(Scanner scanner) throws MissingParamException, ValidationException {
+        PrintUtils.line();
+        PrintUtils.title("=== Add Product ===");
+        PrintUtils.line();
         System.out.println("Enter product name:");
         String name = scanner.nextLine();
         System.out.println("Enter product price:");
@@ -30,7 +35,7 @@ public class AddProduct {
         String stock = scanner.nextLine();
         Product product = Product.builder()
                 .name(name)
-                .price(new MonetaryAmount(Double.parseDouble(price), currency))
+                .price(new MonetaryAmount(BigDecimal.valueOf(Double.parseDouble(price)), currency))
                 .stock(Integer.parseInt(stock))
                 .build();
         if (!productValidator.isValid(product)) {
@@ -39,6 +44,8 @@ public class AddProduct {
             throw new MissingParamException("Missing param");
         } else {
             productCRUDService.addProduct(product);
+            PrintUtils.line();
+            PrintUtils.success("Product added successfully.");
         }
     }
 }

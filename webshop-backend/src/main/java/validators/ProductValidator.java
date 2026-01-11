@@ -1,7 +1,8 @@
 package validators;
 
-import model.Country;
 import model.Product;
+
+import java.math.BigDecimal;
 
 public class ProductValidator implements Validator<Product> {
 
@@ -10,20 +11,12 @@ public class ProductValidator implements Validator<Product> {
     // product-price: must be positive
     // product-stock: must be a positive number
 
-    public static boolean isValidCountry(Country country) {
-        return country != null;
-    }
-
-    public static boolean isValidStock(int stock) {
-        return stock > 0;
-    }
-
     @Override
     public boolean isValid(Product product) {
         if (!product.getName().matches("[a-z ]+")) {
             return false;
         }
-        if (product.getPrice().getAmount() < 0) {
+        if (product.getPrice().getAmount().compareTo(BigDecimal.ZERO) <= 0) {
             return false;
         }
         if (product.getStock() <= 0) {

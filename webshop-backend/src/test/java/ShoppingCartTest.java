@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import service.ShoppingCart;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,8 +20,8 @@ class ShoppingCartTest {
         Product p = Product.builder()
                 .id(1)
                 .name("laptop")
-                .price(new MonetaryAmount(2500, MoneyCurrency.EUR))
                 .stock(1)
+                .price(new MonetaryAmount(new BigDecimal(2500), MoneyCurrency.EUR))
                 .build();
         assertTrue(shoppingCart.addProduct(p));
     }

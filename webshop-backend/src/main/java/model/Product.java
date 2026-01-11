@@ -17,8 +17,12 @@ public class Product {
     private long id;
     @Column(name = "product_name")
     private String name;
-    @Column(name = "product_price")
-    private MonetaryAmount price;
     @Column(name = "product_stock")
     private int stock;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "amount", column = @Column(name = "product_amount")),
+            @AttributeOverride(name = "currency", column = @Column(name = "product_currency"))
+    })
+    private MonetaryAmount price;
 }

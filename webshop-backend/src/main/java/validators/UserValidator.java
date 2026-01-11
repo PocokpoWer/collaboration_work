@@ -2,6 +2,8 @@ package validators;
 
 import model.User;
 
+import java.math.BigDecimal;
+
 public class UserValidator implements Validator<User> {
     //TODO
     // user-id: ellenőrzés: pl, pozitív szám legyen
@@ -16,17 +18,15 @@ public class UserValidator implements Validator<User> {
 
     @Override
     public boolean isValid(User user) {
-        if (user.getId() <= 0)
-            return false;
         if (user.getName().trim().isEmpty())
             return false;
         if (user.getAge() <= 18 || user.getAge() >= 105)
             return false;
-        if (user.getBalance().getAmount() < 0)
+        if (user.getBalance().getAmount().compareTo(BigDecimal.ZERO) > 0)
             return false;
         if (user.getAddress().getCity().trim().isEmpty())
             return false;
-        if (user.getShoppingCart() == null) return false;
+    /*   if (user.getShoppingCart() == null) return false;*/
         return user.getAddress().getCountry() != null;
     }
 }

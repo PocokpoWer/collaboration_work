@@ -4,6 +4,8 @@ import model.MonetaryAmount;
 import model.User;
 import utils.PrintUtils;
 
+import java.math.BigDecimal;
+
 public class PayService {
 
     /**
@@ -23,13 +25,13 @@ public class PayService {
         User owner = cart.getOwner();
         MonetaryAmount balance = owner.getBalance();
 
-        int totalPrice = cart.getTotalPrice();
-        double balanceAmount = balance.getAmount();
+        BigDecimal totalPrice = cart.getTotalPrice();
+        BigDecimal balanceAmount = balance.getAmount();
 
         //Check : May you have enough money?
 
-        if (balanceAmount >= totalPrice) {
-            double newAmount = balanceAmount - totalPrice;
+        if (balanceAmount.compareTo(totalPrice) >= 0) {
+            BigDecimal newAmount = balanceAmount.subtract(totalPrice);
             MonetaryAmount newBalance = new MonetaryAmount(
                     newAmount,
                     balance.getCurrency()
@@ -43,10 +45,10 @@ public class PayService {
                     "(for now)");
             cart.clear();
         } else {
-            double missing = totalPrice - balanceAmount;
+            BigDecimal missing = totalPrice.subtract(balanceAmount);
             PrintUtils.error("Error: user " + owner.getName() + " has insufficient balance. Needed: " + totalPrice +
                     ", available: " + balanceAmount);
-            PrintUtils.info("You are Poor Bro :D (missing: " + (int) missing + "HUF)");
+            PrintUtils.info("You are Poor Bro :D (missing: " + missing + "HUF)");
             PrintUtils.info("Tip: use option 7 (Add balance) to become a RichKid");
         }
     }

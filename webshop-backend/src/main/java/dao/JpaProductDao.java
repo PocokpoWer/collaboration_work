@@ -1,6 +1,5 @@
 package dao;
 
-import exceptions.FailedToDeleteException;
 import jakarta.persistence.EntityTransaction;
 import lombok.AllArgsConstructor;
 import model.Product;
@@ -28,7 +27,7 @@ public class JpaProductDao implements Dao<Product, Long> {
     @Override
     public void save(Product product) {
         executeOrder(() -> {
-            entityManager.merge(product);
+            entityManager.persist(product);
         });
     }
 
