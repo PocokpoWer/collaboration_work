@@ -28,10 +28,10 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: surefire-reports
-        path: target/surefire-reports
+        path: webshop-backend/target/surefire-reports
     
     - name: Upload JaCoCo coverage report
       uses: actions/upload-artifact@v4
       with:
         name: jacoco-report
-        path: target/site/jacoco
+        path: webshop-backend/target/site/jacoco
