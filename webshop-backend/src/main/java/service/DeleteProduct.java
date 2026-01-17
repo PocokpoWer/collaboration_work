@@ -1,6 +1,5 @@
 package service;
 
-import exceptions.FailedToDeleteException;
 import exceptions.MissingParamException;
 import lombok.RequiredArgsConstructor;
 import utils.PrintUtils;
@@ -12,7 +11,7 @@ public class DeleteProduct {
     private final ProductCRUDService productCRUDService;
     private Scanner scanner = new Scanner(System.in);
 
-    public void removeProduct() throws FailedToDeleteException {
+    public void removeProduct() {
         PrintUtils.line();
         PrintUtils.info("=== Delete Product ===");
         PrintUtils.line();

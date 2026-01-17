@@ -26,9 +26,7 @@ public class JpaProductDao implements Dao<Product, Long> {
 
     @Override
     public void save(Product product) {
-        executeOrder(() -> {
-            entityManager.persist(product);
-        });
+        executeOrder(() -> entityManager.persist(product));
     }
 
     @Override

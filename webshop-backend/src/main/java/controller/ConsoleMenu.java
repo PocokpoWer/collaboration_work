@@ -13,7 +13,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import model.MonetaryAmount;
-import model.MoneyCurrency;
 import model.Product;
 import model.User;
 import service.*;
@@ -35,57 +34,48 @@ public class ConsoleMenu {
     //- offer in offer(we need your email for other bundles and present!)
     //- check user activation!
     //- sql data base for user data's!
-
-    private final User user;
-    private final ShoppingCart shoppingCart;
-    private final ChatContext chatContext;
-    private static final List<Product> products = new ArrayList<>();
-    private static final MonetaryAmount balance = new MonetaryAmount(BigDecimal.valueOf(10_000), MoneyCurrency.HUF);
+    private static ChatContext chatContext;
     private static final ShopChatBot chatBot = new ShopChatBot();
     private static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("webshop");
     private static final EntityManager entityManager = entityManagerFactory.createEntityManager();
     private static final JpaProductDao productDao = new JpaProductDao(entityManager);
     private static final ProductCRUDService productCRUDService = new ProductCRUDService(productDao);
-    private static final JpaUserDao userDao = new JpaUserDao(entityManager);
-    private static final UserCRUDService userCRUDService = new UserCRUDService(userDao);
-    private static final AddProduct addProduct = new AddProduct(productCRUDService, new ProductValidator());
+    private static final AddProductCommand addProduct = new AddProductCommand(productCRUDService, new ProductValidator());
     private static final ListProduct listProduct = new ListProduct(productCRUDService);
     private static final DeleteProduct deleteProduct = new DeleteProduct(productCRUDService);
-    private static final AddUser addUser = new AddUser(userCRUDService, new UserValidator());
+    private static final JpaUserDao userDao = new JpaUserDao(entityManager);
+    private static final UserCRUDService userCRUDService = new UserCRUDService(userDao);
+    private static final AddUserCommand addUser = new AddUserCommand(userCRUDService, new UserValidator());
     private static final ListUsers listUser = new ListUsers(userCRUDService);
     private static final DeleteUser deleteUser = new DeleteUser(userCRUDService);
     private static final BuyProduct buyProduct = new BuyProduct();
     // ===== Menu entry points =====
 
-    public ConsoleMenu() {
-        this.user = new User(1, "model.User", 30, null, null, balance);
-        this.shoppingCart = new ShoppingCart();
-        this.chatContext = new ChatContext(user, products, shoppingCart);
-    }
 
     // ===== Menu actions (1-9) =====
 
     public void start() throws FailedToDeleteException, IOException, InterruptedException {
         Scanner sc = new Scanner(System.in);
-
+        User user = choiceUser(sc);
         while (true) {
             printMenu();
             try {
+
                 int input = Integer.parseInt(sc.nextLine());
                 switch (input) {
-                    case 1 -> addUser.execute();
-                    case 2 -> listUser.getAllUser().forEach(System.out::println);
+                    case 1 -> addUser.execute(sc);
+                    case 2 -> listUser.execute().forEach(System.out::println);
                     case 3 -> deleteUser.execute();
                     case 4 -> addProduct.execute(sc);
-                    case 5 -> listProduct.getAllProducts();
+                    case 5 -> listProduct.getAllProducts(user);
                     case 6 -> deleteProduct.removeProduct();
-                    case 7 -> viewCart(sc);
-                    case 8 -> buyProduct.pay(shoppingCart);
-                    //  case 9 -> removeFromCart(sc);
-                    case 10 -> addBalance(sc);
+                    case 7 -> viewCart(sc, user);
+                    case 8 -> buyProduct.pay(user.getShoppingCart());
+                    case 9 -> removeFromCart(sc, user);
+                    case 10 -> addBalance(sc, user);
                     case 11 -> getStatistics(userDao.findAll());
                     case 12 -> chatBot.startChat(sc, chatContext);
-                    case 13 -> {
+                    case 0 -> {
                         sc.close();
                         System.exit(0);
                     }
@@ -113,55 +103,60 @@ public class ConsoleMenu {
         System.out.println("10. Add Balance");
         System.out.println("11. Statistics");
         System.out.println("12. I need help please (ChatBot)");
-        System.out.println("13. Exit");
+        System.out.println("0. Exit");
         System.out.println();
     }
 
-    private void viewCart(Scanner sc) {
+    private void viewCart(Scanner sc, User user) {
         PrintUtils.info("=== Your Cart ===");
 
-        ShoppingCart cart = new ShoppingCart(user);
+        ShoppingCart cart = user.getShoppingCart();
 
-        if (cart.getProducts().isEmpty()) {
+        if (cart == null || cart.getProducts().isEmpty()) {
             PrintUtils.info("Cart is empty.");
             pressEnterToContinue(sc);
             return;
         }
 
-        for (Product p : shoppingCart.getProducts()) {
+        for (Product p : cart.getProducts()) {
             System.out.println(
                     p.getId() + ". " + p.getName() + " - " +
                             p.getPrice().getAmount() + " " +
                             p.getPrice().getCurrency());
         }
 
-        System.out.println("Total: " + shoppingCart.getTotalPrice());
+        System.out.println("Total: " + cart.getTotalPrice());
         pressEnterToContinue(sc);
     }
 
-/*    private void removeFromCart(Scanner sc) {
+    private void removeFromCart(Scanner sc, User user) {
         System.out.println("=== Remove From Cart ===");
-
-        if (shoppingCart.getProducts().isEmpty()) {
+        ShoppingCart userCart = user.getShoppingCart();
+        if (userCart.getProducts().isEmpty()) {
             System.out.println("Cart is empty ");
             return;
         }
 
-        printProductList(shoppingCart.getProducts());
+        userCart.getProducts().forEach(System.out::println);
         System.out.println("Enter product ID to remove");
         long id = Long.parseLong(sc.nextLine());
 
-        Product toRemove = findProductById(id);
+        productCRUDService.findByID(id).ifPresentOrElse(product -> {
 
-        if (toRemove != null && shoppingCart.removeProduct(toRemove)) {
-            System.out.println("Removed from cart: " + toRemove.getName());
-        } else {
-            System.out.println("Product not found in cart. ");
-        }
+            try {
+                if (userCart.removeProduct(product)) {
+                    System.out.println("Removed from cart: " + product.getName());
+                } else {
+                    System.out.println("Product not found in cart. ");
+                }
+            } catch (IOException | InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }, () -> System.out.println("Product not found"));
         pressEnterToContinue(sc);
-    }*/
+    }
 
-    private void addBalance(Scanner sc) {
+    private void addBalance(Scanner sc, User user) {
         System.out.println("=== Add Balance ===");
         System.out.println("Current balance: " +
                 user.getBalance().getAmount() + " " +
@@ -170,7 +165,7 @@ public class ConsoleMenu {
         System.out.println("Enter amount to (0 = cancel): ");
         BigDecimal amountToAdd = BigDecimal.valueOf(Double.parseDouble(sc.nextLine()));
 
-        if (amountToAdd.compareTo(BigDecimal.ZERO) >= 0) {
+        if (amountToAdd.compareTo(BigDecimal.ZERO) <= 0) {
             PrintUtils.info("Top up cancelled.");
             return;
         }
@@ -205,6 +200,20 @@ public class ConsoleMenu {
         System.out.println("Orders per user");
         reportService.getOrderCountPerUser().forEach((user, amount) -> System.out.println(user.getName() + ": " + amount));
         pressEnterToContinue(new Scanner(System.in));
+    }
+
+    private User choiceUser(Scanner sc) {
+        List<User> users = userCRUDService.getAllUsers();
+        users.forEach(System.out::println);
+        System.out.println("Enter your user id number:");
+        int userId = Integer.parseInt(sc.nextLine());
+        if (!users.isEmpty()) {
+            User user = userCRUDService.findById(userId).get();
+            user.getShoppingCart().setOwner(user);
+            System.out.println("Welcome " + user.getName() + "!");
+            return user;
+        }
+        return null;
     }
 
     private void pressEnterToContinue(Scanner sc) {

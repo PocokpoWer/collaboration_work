@@ -4,10 +4,10 @@ import jakarta.persistence.*;
 import lombok.*;
 import service.ShoppingCart;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@AllArgsConstructor
 @Builder
 @Entity
 @Table(name = "users")
@@ -23,7 +23,7 @@ public class User {
     @Embedded
     private Address address;
     @Transient
-    private ShoppingCart shoppingCart;
+    private ShoppingCart shoppingCart = new ShoppingCart();
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "amount", column = @Column(name = "balance_amount")),

@@ -11,12 +11,11 @@ import java.math.BigDecimal;
 import java.util.Scanner;
 
 @RequiredArgsConstructor
-public class AddUser {
+public class AddUserCommand implements Command {
     private final UserCRUDService userCRUDService;
     private final UserValidator userValidator;
-    private Scanner sc = new Scanner(System.in);
 
-    public void execute() {
+    public void execute(Scanner sc) {
         PrintUtils.line();
         PrintUtils.title("=== Add User ===");
         PrintUtils.line();
@@ -33,7 +32,7 @@ public class AddUser {
                 .name(name)
                 .age(age)
                 .address(new Address(Country.valueOf(country), city))
-                .shoppingCart(new ShoppingCart(null))
+                .shoppingCart(new ShoppingCart())
                 .balance(new MonetaryAmount(BigDecimal.ZERO, MoneyCurrency.EUR))
                 .build();
 
@@ -42,9 +41,13 @@ public class AddUser {
         } else if (user == null) {
             throw new MissingParamException("Missing param");
         } else {
-            userCRUDService.addUser(user);
-            PrintUtils.line();
-            PrintUtils.success("User added successfully.");
+            try {
+                userCRUDService.addUser(user);
+                PrintUtils.line();
+                PrintUtils.success("User added successfully.");
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+            }
         }
     }
 }

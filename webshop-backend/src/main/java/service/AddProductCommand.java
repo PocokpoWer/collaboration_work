@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 import java.util.Scanner;
 
 @AllArgsConstructor
-public class AddProduct {
+public class AddProductCommand implements Command {
     private ProductCRUDService productCRUDService;
     private ProductValidator productValidator;
 
@@ -43,9 +43,13 @@ public class AddProduct {
         } else if (product == null) {
             throw new MissingParamException("Missing param");
         } else {
-            productCRUDService.addProduct(product);
-            PrintUtils.line();
-            PrintUtils.success("Product added successfully.");
+            try {
+                productCRUDService.addProduct(product);
+                PrintUtils.line();
+                PrintUtils.success("Product added successfully.");
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+            }
         }
     }
 }

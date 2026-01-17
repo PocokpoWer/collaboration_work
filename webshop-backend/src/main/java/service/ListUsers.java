@@ -1,16 +1,20 @@
 package service;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import model.User;
 import utils.PrintUtils;
 
 import java.util.List;
+import java.util.Scanner;
+import java.util.Optional;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ListUsers {
-    private UserCRUDService userCRUDService;
+    private final UserCRUDService userCRUDService;
+    protected static Optional<User> user;
+    private static final Scanner scanner = new Scanner(System.in);
 
-    public List<User> getAllUser() {
+    public List<User> execute() {
         PrintUtils.line();
         PrintUtils.info("=== Available Users ===");
         PrintUtils.line();

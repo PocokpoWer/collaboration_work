@@ -8,6 +8,7 @@ import model.User;
 
 import java.util.List;
 import java.util.Optional;
+
 @NoArgsConstructor
 @AllArgsConstructor
 public class JpaUserDao implements Dao<User, Long> {
@@ -26,17 +27,16 @@ public class JpaUserDao implements Dao<User, Long> {
 
     @Override
     public void save(User user) {
-        entityManager.persist(user);
+        executeOrder(() -> entityManager.persist(user));
     }
 
     @Override
-    public void delete(Long aLong) {
+    public void delete(Long id) {
         executeOrder(() -> {
-            int deleted = entityManager.createQuery("DELETE FROM User u WHERE u.id = :id").setParameter("id", aLong).executeUpdate();
-            entityManager.flush();
-            entityManager.clear();
-            if (deleted != 0) {
-                User user = entityManager.find(User.class, aLong);
+            User user = entityManager.find(User.class, id);
+            if (user == null) {
+                throw new RuntimeException("User with id " + id + " not found");
+            } else {
                 entityManager.remove(user);
             }
         });

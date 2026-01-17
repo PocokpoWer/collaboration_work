@@ -24,7 +24,7 @@ public class PayServiceTest {
                 .name("Sanyi")
                 .balance(new MonetaryAmount(new BigDecimal(1520), MoneyCurrency.EUR))
                 .build();
-        ShoppingCart cart = new ShoppingCart(user);
+        ShoppingCart cart = new ShoppingCart();
         Product milk = new Product(20L, "milk",
                 2, new MonetaryAmount(new BigDecimal(10), MoneyCurrency.EUR));
         cart.addProduct(milk);

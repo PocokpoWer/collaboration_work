@@ -6,9 +6,10 @@ import model.Product;
 
 import java.util.List;
 import java.util.Optional;
+
 @AllArgsConstructor
 public class ProductCRUDService {
-    private final Dao productDao;
+    private final Dao<Product, Long> productDao;
 
     public Optional<Product> findByID(long id) {
         return productDao.findById(id);

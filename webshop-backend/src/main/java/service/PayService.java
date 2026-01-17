@@ -1,6 +1,7 @@
 package service;
 
 import model.MonetaryAmount;
+import model.MoneyCurrency;
 import model.User;
 import utils.PrintUtils;
 
@@ -23,6 +24,9 @@ public class PayService {
         //Owner Data's :
 
         User owner = cart.getOwner();
+        if (owner == null) {
+            PrintUtils.error("Error: This cart has no owner.");
+        }
         MonetaryAmount balance = owner.getBalance();
 
         BigDecimal totalPrice = cart.getTotalPrice();
@@ -48,8 +52,8 @@ public class PayService {
             BigDecimal missing = totalPrice.subtract(balanceAmount);
             PrintUtils.error("Error: user " + owner.getName() + " has insufficient balance. Needed: " + totalPrice +
                     ", available: " + balanceAmount);
-            PrintUtils.info("You are Poor Bro :D (missing: " + missing + "HUF)");
-            PrintUtils.info("Tip: use option 7 (Add balance) to become a RichKid");
+            PrintUtils.info("You are Poor Bro :D (missing: " + missing + " " + MoneyCurrency.EUR + ")");
+            PrintUtils.info("Tip: use option 10 (Add balance) to become a RichKid");
         }
     }
 }

@@ -18,22 +18,21 @@ import java.util.List;
 import java.util.Map;
 
 @Getter
-@Embeddable
-@RequiredArgsConstructor
+@Setter
 @NoArgsConstructor(force = true)
+@AllArgsConstructor
 @ToString
+
 public class ShoppingCart {
-    @ManyToMany
     private List<Product> products = new ArrayList<>();
-    @Transient
     private BigDecimal totalPrice = BigDecimal.ZERO;
-    @Transient
-    private final User owner;
+    @ToString.Exclude
+    private User owner;
 
     public boolean addProduct(Product p) throws IOException, InterruptedException {
         if (p.getStock() > 0) {
             products.add(p);
-            totalPrice.add(exchangeCurrency(p.getPrice().getAmount(), p.getPrice().getCurrency(), MoneyCurrency.EUR));
+            totalPrice = totalPrice.add(exchangeCurrency(p.getPrice().getAmount(), p.getPrice().getCurrency(), MoneyCurrency.EUR));
             p.setStock(p.getStock() - 1);
             return true;
         } else {
@@ -42,9 +41,9 @@ public class ShoppingCart {
         }
     }
 
-    public boolean removeProduct(Product p) {
+    public boolean removeProduct(Product p) throws IOException, InterruptedException, RuntimeException {
         if (products.remove(p)) {
-            totalPrice.subtract(p.getPrice().getAmount());
+            totalPrice = totalPrice.subtract(exchangeCurrency(p.getPrice().getAmount(), p.getPrice().getCurrency(), MoneyCurrency.EUR));
             p.setStock(p.getStock() + 1);
             return true;
         } else {
@@ -64,13 +63,17 @@ public class ShoppingCart {
         String json = client.send(request, HttpResponse.BodyHandlers.ofString()).body();
 
         ObjectMapper mapper = new ObjectMapper();
-        Map<String, BigDecimal> response = (Map<String, BigDecimal>) mapper.readValue(json, Map.class).get("eur");
+        Map<String, Object> response = mapper.readValue(json, Map.class);
+        Map<String, Object> rates = (Map<String, Object>) response.get("eur");
         String to = toCurrency.toString().toLowerCase();
         String from = fromCurrency.toString().toLowerCase();
+
         if (fromCurrency == MoneyCurrency.EUR) {
-            return amount.multiply(response.get(to));
+            BigDecimal rate = new BigDecimal(rates.get(to).toString());
+            return amount.multiply(rate);
         } else if (toCurrency == MoneyCurrency.EUR) {
-            return amount.divide(response.get(from));
+            BigDecimal rate = new BigDecimal(rates.get(from).toString());
+            return amount.divide(rate, 2, BigDecimal.ROUND_HALF_UP);
         }
         throw new IllegalArgumentException("Unsupported currency conversion");
     }

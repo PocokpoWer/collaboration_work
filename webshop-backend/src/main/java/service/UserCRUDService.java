@@ -5,13 +5,14 @@ import lombok.AllArgsConstructor;
 import model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 public class UserCRUDService {
-    private final Dao userDao;
+    private final Dao<User, Long> userDao;
 
-    public void findById(long id) {
-        userDao.findById(id);
+    public Optional<User> findById(long id) {
+        return userDao.findById(id);
     }
 
     public void addUser(User user) {
